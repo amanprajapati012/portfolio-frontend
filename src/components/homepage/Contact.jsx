@@ -31,32 +31,35 @@ export default function Contact() {
   };
 
   // ✅ API SUBMIT + TOAST
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/contact`,{
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+  try {
+    // Frontend ko turant success dena
+    const res = await fetch(`${API_BASE_URL}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (data.success) {
-        toast.success("Message sent successfully 🚀");
-        setForm({ name: "", email: "", phone: "", message: "" });
-      } else {
-        toast.error("Failed to send message ❌");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Server error ❌");
-    } finally {
-      setLoading(false);
+    if (data.success) {
+      toast.success("Message sent successfully 🚀");
+      setForm({ name: "", email: "", phone: "", message: "" });
+    } else {
+      toast.error("Failed to send message ❌");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    toast.error("Server error ❌");
+  } finally {
+    // Loading hamesha false kar dena, chahe email fail ho
+    setLoading(false);
+  }
+};
+
 
   return (
     <section
