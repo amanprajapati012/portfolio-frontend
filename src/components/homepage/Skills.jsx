@@ -5,19 +5,20 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import API_BASE_URL from "@/config/api";
 
-
-
 export default function Skills() {
   const [skills, setSkills] = useState([]);
 
+  // FETCH SKILLS ON COMPONENT MOUNT
   useEffect(() => {
-    fetchSkills(); // ✅ sirf ek baar
+    fetchSkills();
   }, []);
 
   const fetchSkills = async () => {
     try {
       const res = await axios.get(`${API_BASE_URL}/api/skills`);
       console.log("SKILLS FROM API:", res.data);
+
+      // Expecting each skill: { _id, name, image: "https://ik.imagekit.io/..." }
       setSkills(res.data);
     } catch (err) {
       console.error("Fetch skills error:", err);
@@ -25,7 +26,10 @@ export default function Skills() {
   };
 
   return (
-    <section  id="skills" className="relative py-28 bg-gradient-to-b from-white to-slate-50">
+    <section
+      id="skills"
+      className="relative py-28 bg-gradient-to-b from-white to-slate-50"
+    >
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl font-bold text-center mb-16">
           My Skills & Tools
@@ -39,7 +43,7 @@ export default function Skills() {
               className="rounded-2xl bg-white shadow p-6 flex flex-col items-center"
             >
               <img
-                src={`${API_BASE_URL}${skill.image}`}
+                src={skill.image} // ImageKit URL directly
                 alt={skill.name}
                 className="w-16 h-16 object-contain mb-3"
               />
@@ -48,6 +52,8 @@ export default function Skills() {
           ))}
         </div>
       </div>
+
+      {/* Decorative circles */}
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl"></div>
     </section>

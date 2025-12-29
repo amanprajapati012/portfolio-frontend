@@ -4,16 +4,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import API_BASE_URL from "@/config/api";
-import { addPointerEvent } from "framer-motion";
 
-export default function Skills() {
+export default function SkillsAdmin() {
   const [skills, setSkills] = useState([]);
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ FETCH SKILLS (ONLY ONCE)
+  // FETCH SKILLS ON MOUNT
   useEffect(() => {
     fetchSkills();
   }, []);
@@ -27,13 +26,18 @@ export default function Skills() {
     }
   };
 
-  // HANDLE IMAGE
+  // HANDLE IMAGE SELECTION
   const handleImage = (e) => {
     const img = e.target.files[0];
     if (!img) return;
 
     if (!img.type.startsWith("image/")) {
       toast.error("Only image files allowed");
+      return;
+    }
+
+    if (img.size > 5 * 1024 * 1024) { // 5MB limit
+      toast.error("Image size must be <= 5MB");
       return;
     }
 
@@ -44,7 +48,6 @@ export default function Skills() {
   // ADD SKILL
   const addSkill = async (e) => {
     e.preventDefault();
-
     if (!name.trim()) return toast.error("Enter skill name");
     if (!file) return toast.error("Select skill image");
 
@@ -69,7 +72,7 @@ export default function Skills() {
       setName("");
       setFile(null);
       setPreview("");
-      fetchSkills(); // ✅ manual refresh
+      fetchSkills(); // refresh list
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong");
@@ -88,8 +91,7 @@ export default function Skills() {
         error: "Delete failed ❌",
       }
     );
-
-    fetchSkills(); // ✅ manual refresh
+    fetchSkills();
   };
 
   return (
@@ -108,7 +110,7 @@ export default function Skills() {
           className="border rounded px-4 py-2"
         />
 
-        <input type="file" onChange={handleImage} />
+        <input type="file" accept="image/*" onChange={handleImage} />
 
         <button
           disabled={loading}
@@ -131,13 +133,11 @@ export default function Skills() {
         {skills.map((s) => (
           <div key={s._id} className="bg-white rounded shadow p-4 relative">
             <img
-              src={`${API_BASE_URL}${s.image}`}
+              src={s.image}
               alt={s.name}
               className="w-16 h-16 mx-auto object-contain"
             />
-
             <p className="text-center mt-2">{s.name}</p>
-
             <button
               onClick={() => deleteSkill(s._id)}
               className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6"

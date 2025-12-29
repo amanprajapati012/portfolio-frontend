@@ -2,34 +2,36 @@
 
 /* -------------------------------
    Root Theme Variables
--------------------------------- */
+-/* Ensure proper box-sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Root theme variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #ffffff;
+    --foreground: #171717;
 }
 
-/* Tailwind theme bindings */
-
-
-/* -------------------------------
-   Dark Mode (Manual Toggle)
--------------------------------- */
+/* Dark mode toggle */
 html.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+    --background: #0a0a0a;
+    --foreground: #ededed;
 }
 
-/* -------------------------------
-   Base Styles
--------------------------------- */
+/* Base Styles */
 html, body {
+    margin: 0;             /* Remove default margin */
+    padding: 0;            /* Remove default padding */
+    width: 100%;           /* Ensure html/body take full width */
+    min-height: 100%;      /* Full height */
     background-color: var(--background);
-    max-width: 100%;
     color: var(--foreground);
     font-family: var(--font-geist-sans);
     transition: background-color .3s, color .3s;
-    overflow-x: hidden;
+    overflow-x: hidden;    /* Remove horizontal scroll */
 }
+
 
 /* -------------------------------
    Components
